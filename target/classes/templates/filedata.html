@@ -1,0 +1,721 @@
+<!DOCTYPE HMTL>
+<html xmlns:th="">
+<head>
+<title>BCControl</title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<!--
+***********************************************************************
+*
+* This version is experimental, lots of hard coded stuff and quick
+* hacks as a trade-off for early POC delivery.
+*
+* It will get better in time, if you find something broken - fix it !
+*
+***********************************************************************
+-->
+<style>
+.PII_update {
+    width: 50%;
+    /* height: 400px; */
+    background: #ffffff;
+    position: fixed;
+    display: none;
+    top: 15%;
+    left: 25%;
+    border: solid 1px #cccc
+}
+.update_field {
+    width: 100%;
+    float: left;
+    margin: 10px 0;
+}
+.overlay {
+    width: 100%;
+    position: fixed;
+    background: #ccc;
+    left: 0;
+    opacity: .8;
+       display: none;
+    top: 0;
+    height: 100%;
+}
+.update_input {
+    width: 80%;
+    padding: 4px;
+    margin: 10px 10%;
+    font-size: 12px;
+}
+</style>
+
+<body style="background-color:#ededed">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+
+
+
+
+   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li>
+      <div class="container-fluid" >
+    <div class="navbar-header"> <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-log-in"></span><img src="ball_logo.png" width="40"  /><b>&nbsp;SecureX</b></a> </div>
+  </div>
+      </li>
+
+
+
+
+      <li class="nav-item ">
+        <a class="nav-link" style="padding-top:12px;" href="./">PII Data</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" style="padding-top:12px;" href="./filedata" >File Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="padding-top:12px;" href="./offchain">Off Chain</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="padding-top:12px;" href="./audittrail">Audit Trail</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav navbar-right">
+      <li class="nav-item">
+        <a class="nav-link" style="padding-top:12px;" href="#">Administration</a>
+      </li>
+
+    </ul>
+	<!--
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    -->
+
+  </div>
+
+
+
+
+
+</nav>
+
+<nav class="navbar navbar-expand-md navbar-light" >
+  <div class="container-fluid">
+    <ul class="nav navbar-nav navbar-left">
+      <li><a class="navbar-brand" href="#"><span></span></a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a class="navbar-brand" href="#"><span class="glyphicon glyphicon-log-in"></span><img src="data_dynamics_logo.png" width="150"  /> </a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<main role="main">
+  <div class="container-fluid" style="margin-top:0px">
+    <table border=0 width=100%>
+      <tr>
+        <td width=100></td>
+        <td colspan=4 style="font-size:25px; "><img src="ball_logo.png" width="50"/> &nbsp;<b>Blockchain POC 0.3.0 - FILE PROFILE DATA</b></td>
+      </tr>
+      <tr>
+        <td width=100><div style="height:50px"></div></td>
+      </tr>
+             <div width="100%">
+      <tr>
+
+
+        <td align="center" style="max-width:50px" ></td>
+          <td colspan="3" ><div class="card" style="margin-top:0px; height:300px; width:100%; ">
+            <div class="card-header bg-dark task-header text-center text-white" >
+              <table border="0" style="color:white">
+                <tr>
+                  <td style="width:25px;"><svg class="bi bi-server" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M13 2c0-1.105-2.239-2-5-2S3 .895 3 2s2.239 2 5 2 5-.895 5-2z"/>
+                      <path d="M13 3.75c-.322.24-.698.435-1.093.593C10.857 4.763 9.475 5 8 5s-2.857-.237-3.907-.657A4.881 4.881 0 013 3.75V6c0 1.105 2.239 2 5 2s5-.895 5-2V3.75z"/>
+                      <path d="M13 7.75c-.322.24-.698.435-1.093.593C10.857 8.763 9.475 9 8 9s-2.857-.237-3.907-.657A4.881 4.881 0 013 7.75V10c0 1.105 2.239 2 5 2s5-.895 5-2V7.75z"/>
+                      <path d="M13 11.75c-.322.24-.698.435-1.093.593-1.05.42-2.432.657-3.907.657s-2.857-.237-3.907-.657A4.883 4.883 0 013 11.75V14c0 1.105 2.239 2 5 2s5-.895 5-2v-2.25z"/>
+                    </svg></td>
+                  <td style="width:275px;"> FILE PROFILE DATA </td>
+                  <td align="right" style="width:1400px"><div id="fileprofiledatalines"></div></td>
+                </tr>
+              </table>
+            </div>
+            <div class="card-body" style="overflow-x: auto;">
+              <div id="fileprofiledata" >  <table border="0">
+<!--
+                <tr>
+
+                  <td align="right" style="width:5%"><div class="btn-group"> <a href="#" class="btn btn-outline-dark btn-sm" >EDIT</a> </div></td>
+                </tr>
+-->
+              </table></div>
+            </div>
+            <div class="card-footer">
+              <table border="0">
+                <tr>
+                  <!--
+                  <td align="left" style="width:30%"><div class="input-group mb-3" style="margin-top:14px; margin-bottom:0px;">
+                      <div class="input-group-prepend" > <span class="input-group-text" id="basic-addon1">Path</span> </div>
+                      <input id="piilocation" type="text" class="form-control" placeholder="Enter PII Data Path" aria-label="plaintext" aria-describedby="basic-addon1">
+                      </input>
+                    </div></td>
+-->
+                  <td align="right" style="width:100%"><div class="btn-group"> <a href="javascript:void(0)" onclick="readFileProfile()" class="btn btn-outline-dark btn-sm" >SCAN</a> </div></td>
+                  <td align="right" style="width:5%"><div class="btn-group"> <a href="javascript:void(0)" onclick="clearScanResults('#fileprofiledata', '#fileprofiledatalines')" class="btn btn-outline-dark btn-sm" >CLEAR</a> </div></td>
+                </tr>
+              </table>
+            </div>
+          </div></td>
+        <td width=100></td>
+      </tr>
+
+        </div>
+           <tr height=50>
+        <td colspan=5>&nbsp;</td>
+      </tr>
+      <div width="100%">
+        <td width=100></td>
+          <td colspan="3"><div class="card" style="margin-top:0px; height:300px;width:100% ">
+            <div class="card-header bg-dark task-header text-center text-white" >
+              <table border="0" style="color:white">
+                <tr>
+                  <td style="width:25px"><svg class="bi bi-lock-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="11" height="9" x="2.5" y="7" rx="2"/>
+                      <path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z" clip-rule="evenodd"/>
+                    </svg></td>
+                  <td style="width:275px"> BLOCKCHAIN </td>
+                  <td align="right" style="width:1400px"><div id="fileprofilelines_bc"></div></td>
+                </tr>
+              </table>
+            </div>
+            <div class="card-body" style="overflow-x: auto;">
+              <div id="fileprofiledata_bc" ></div>
+            </div>
+            <div class="card-footer">
+              <table border="0">
+                <tr>
+                  <td align="right" style="width:95%"><div class="btn-group"> <a href="javascript:void(0)" onclick="scanAndTransactFileProfiles();" class="btn btn-outline-dark btn-sm" >TRANSACT</a> </div></td>
+                  <td align="right" style="width:5%"><div class="btn-group"> <a href="javascript:void(0)" onclick="readFileProfilesFromBC();" class="btn btn-outline-dark btn-sm" >REFRESH</a> </div></td>
+                </tr>
+              </table>
+            </div>
+          </div></td>
+
+        <td width=100></td>
+      </div>
+           <tr height=50>
+        <td colspan=5>&nbsp;</td>
+      </tr>
+       <div width="100%">
+           <tr>
+        <td width=100></td>
+        <td colspan="3"><div class="card" style="margin-top:0px; height:400px;">
+            <div class="card-header bg-dark task-header text-center text-white" >
+              <table border="0" style="color:white">
+                <tr>
+                  <td style="width:25px"><svg class="bi bi-collection-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="16" height="10" rx="1.5" transform="matrix(1 0 0 -1 0 14.5)"/>
+                      <path fill-rule="evenodd" d="M2 3a.5.5 0 00.5.5h11a.5.5 0 000-1h-11A.5.5 0 002 3zm2-2a.5.5 0 00.5.5h7a.5.5 0 000-1h-7A.5.5 0 004 1z" clip-rule="evenodd"/>
+                    </svg></td>
+                  <td style="width:275px"> DATA AUDIT TRAIL </td>
+                  <td align="right" style="width:1400px"><div id="auditlines"></div></td>
+                </tr>
+              </table>
+            </div>
+            <div class="card-body" style="overflow-x: auto;">
+              <div id="auditcontent" ></div>
+            </div>
+            <table border="0">
+              <tr>
+                <td style="width:50%" valign="top"></td>
+                <td style="width:5%">&nbsp;</td>
+                <td style="width:50%" valign="top"></td>
+              </tr>
+            </table>
+            <div class="card-footer">
+              <table border="0">
+                <tr>
+                  <td><div class="input-group mb-3" style="margin-top:14px; margin-bottom:0px;">
+                      <div class="input-group-prepend" > <span class="input-group-text bg-dark" id="basic-addon1" style="color:white;">Name</span> </div>
+                      <input id="piiname" type="text" class="form-control" placeholder="Enter PII Name" aria-label="plaintext" aria-describedby="basic-addon1">
+                      </input>
+                    </div></td>
+                  <td style="width:12%; padding-left:20px;" ><div class="btn-group" style="margin-top:0px;"> <a href="javascript:void(0)" onclick="createAuditTrail()" class="btn btn-outline-dark btn-sm" >CREATE AUDIT TRAIL</a> </div></td>
+                </tr>
+              </table>
+            </div>
+          </div></td>
+
+        <td width=100></td>
+</tr>
+      </div>
+
+
+    </table>
+    <div id="overlay" class="overlay" ></div>
+    <div id="PII_form" class="PII_update"  >
+      <div class="card-header bg-dark task-header text-center text-white" >PII Updates</div>
+      <div class="update_field" >
+        <input class="update_input" type="text" placeholder="Name" aria-label="plaintext" aria-describedby="basic-addon1">
+        <input id="pii_email_input" class="update_input" type="text" placeholder="Email ID" aria-label="plaintext" aria-describedby="basic-addon1">
+        </input>
+        <input id="pii_address_input" class="update_input" type="text" placeholder="Address" aria-label="plaintext" aria-describedby="basic-addon1">
+        </input>
+        <input class="update_input" type="text" placeholder="Phone Number" aria-label="plaintext" aria-describedby="basic-addon1">
+        <input id="pii_card_input" class="update_input" type="text" placeholder="Card Number" aria-label="plaintext" aria-describedby="basic-addon1">
+        </input>
+        <input id="pii_gender_input" class="update_input" type="text" placeholder="Gender" aria-label="plaintext" aria-describedby="basic-addon1">
+        </input>
+        <input id="pii_profession_input" class="update_input" type="text" placeholder="Profession" aria-label="plaintext" aria-describedby="basic-addon1">
+        </input>
+        <div class="card-footer">
+          <table border="0">
+            <tr>
+              <td align="right" style="width:95%"><div class="btn-group"> <a href="#"  class="btn btn-outline-dark btn-sm" >SAVE</a> </div></td>
+              <td align="right" style="width:5%"><div id="cancle" class="btn-group"> <a href="#" class="btn btn-outline-dark btn-sm" >CANCEL</a> </div></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <br>
+    </br>
+    <br>
+    </br>
+    <br>
+    </br>
+    <br>
+    </br>
+    <br>
+    </br>
+  </div>
+</main>
+<footer class="footer bg-dark fixed-bottom">
+  <div class="container"> <span class="text-muted">BCControl Version 0.1 </span> </div>
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript">
+                //<![CDATA[
+
+
+                	function createAuditTrail(){
+
+                		name = $("#piiname").val();
+                		var url="/createaudittrail?name="+name;
+                		var td="<td style=\"font-size:12px; background-color:#f2f5f0; overflow:hidden; height:35px; padding-left:6px\">"
+        				var tdalt="<td style=\"font-size:12px;padding-left:6px;overflow:hidden;height:35px;\">"
+        				var tdend="</td>"
+						var counter=0
+						var spinner = "<img src=\"spinner.gif\" height=\"35\" />"
+						$("#auditcontent").html(spinner);
+						var lockicon = "<svg class=\"bi bi-lock-fill\" width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"> <rect width=\"11\" height=\"9\" x=\"2.5\" y=\"7\" rx=\"2\"/> <path fill-rule=\"evenodd\" d=\"M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z\" clip-rule=\"evenodd\"/> </svg>"
+
+                		$.ajax({
+                            url: url,
+                            type: 'GET',
+                            datatype: 'json',
+                            async: true,
+                            success: function(data){
+								var toinsert = "<table width=100% style=\"border: 0px solid black; border-collapse: separate; border-spacing: 3px 0px;\">"
+								data.forEach(function (arrayItem) {
+									counter++;
+									if (counter % 2 == 0){
+										tdstart=tdalt;
+									} else {
+										tdstart=td;
+									}
+
+
+									toinsert=toinsert+"<tr>";
+								    var name = arrayItem.name
+								    var address = arrayItem.address
+								    var email = arrayItem.email
+								    var mobile= arrayItem.mobileNo
+								    var gender= arrayItem.gender
+								    var dob= arrayItem.dob
+								    var prof= arrayItem.profession
+									var timestamp="2020/01/01"
+								    var descr=arrayItem.auditdescr
+								    toinsert = toinsert+tdstart+lockicon+tdend+tdstart+name+tdend+tdstart+address+tdend+tdstart+email+tdend+tdstart+mobile+tdend+tdstart+gender+tdend+tdstart+dob+tdend+tdstart+prof+tdend+tdstart+timestamp+tdend+tdstart+descr+tdend+"</tr>"
+								});
+								toinsert=toinsert+"</table>"
+
+								if (counter == 0){
+									toinsert=name + ": No audit trail available.";
+								}
+
+
+								$("#auditcontent").hide();
+                            	$("#auditcontent").html(toinsert);
+                            	$("#auditcontent").fadeIn('fast');
+
+
+                            		$("#auditlines").html("Data Owner: " + name + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    Auditable Changes: &nbsp;" + counter);
+
+                            },
+                            error: function(){
+                                    return "error";
+                            }
+                    });
+                    return "foo";
+
+
+                	}
+
+
+
+
+                	function scanAndTransactFileProfiles(){
+                		var url="/scanandtransactfileprofiles"
+                			var td="<td style=\"font-size:12px; background-color:#ffe8e8;overflow:hidden; height:35px; padding-left:6px\">"
+                				var tdalt="<td style=\"font-size:12px;padding-left:6px;overflow:hidden;height:35px;\">"
+    						var tdend="</td>"
+    						var counter=0
+    						//var unlockicon = "<svg class=\"bi bi-unlock-fill\" width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"> <rect width=\"11\" height=\"9\" x=\"2.5\" y=\"7\" rx=\"2\"/> <path fill-rule=\"evenodd\" d=\"M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z\" clip-rule=\"evenodd\"/> </svg>"
+    						var lockicon = "<svg class=\"bi bi-lock-fill\" width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"> <rect width=\"11\" height=\"9\" x=\"2.5\" y=\"7\" rx=\"2\"/> <path fill-rule=\"evenodd\" d=\"M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z\" clip-rule=\"evenodd\"/> </svg>"
+
+
+
+    						var spinner = "<img src=\"spinner.gif\" height=\"35\" />"
+
+    							$("#fileprofiledata_bc").html(spinner);
+                    		$.ajax({
+                                url: url,
+                                type: 'GET',
+                                datatype: 'json',
+                                async: true,
+                                success: function(data){
+    								var toinsert = "<table width=100% style=\"border: 0px solid black; border-collapse: separate; border-spacing: 3px 0px;\">"
+    								data.forEach(function (arrayItem) {
+    									counter++;
+    									if (counter % 2 == 0){
+    										tdstart=tdalt;
+    									} else {
+    										tdstart=td;
+    									}
+
+
+    									toinsert=toinsert+"<tr>";
+    								    var filename = arrayItem.filename
+    								    var nashost = arrayItem.nashost
+    								    var filepath = arrayItem.filepath
+    								    var uid = arrayItem.uid
+    								    var username = arrayItem.username
+    								    var gid = arrayItem.gid
+    								    var groupname = arrayItem.groupname
+    								    var unixuserperm= arrayItem.unixuserperm
+    								    var unixgroupperm= arrayItem.unixgroupperm
+    								    var unixotherperm= arrayItem.unixotherperm
+    								    var ctime=arrayItem.ctime
+    								    var atime=arrayItem.atime
+    								    var mtime=arrayItem.mtime
+    								    var btime=arrayItem.btime
+    								    var devname=arrayItem.devname
+    								    var devtype=arrayItem.devtype
+    								    var fstype=arrayItem.fstype
+
+    								    toinsert = toinsert+tdstart+lockicon+tdend+tdstart+filename+tdend+tdstart+nashost+tdend+tdstart+filepath+tdend+tdstart+uid+tdend+tdstart+username+tdend+tdstart+gid+tdend+tdstart+groupname+tdend+tdstart+unixuserperm+tdend+tdstart+unixgroupperm+tdend+tdstart+unixotherperm+tdend+tdstart+ctime+tdend+tdstart+atime+tdend+tdstart+mtime+tdend+tdstart+btime+tdend+tdstart+devname+tdend+tdstart+devtype+tdend+tdstart+fstype+tdend+"</tr>"
+    								});
+    								toinsert=toinsert+"</table>"
+
+
+    								$("#fileprofiledata_bc").hide();
+                                	$("#fileprofiledata_bc").html(toinsert);
+                                	$("#fileprofiledata_bc").fadeIn('fast');
+
+    								$("#fileprofiledatalines_bc").html("Data Sets: &nbsp;" + counter);
+
+                                },
+                                error: function(){
+                                        return "error";
+                                }
+                        });
+                        return "foo";
+
+
+
+                	}
+
+                	function readPII(){
+
+                		var url = "/readpii";
+                		var td="<td style=\"font-size:12px; background-color:#f0f5f5;overflow:hidden; height:35px; padding-left:6px\">"
+            				var tdalt="<td style=\"font-size:12px;padding-left:6px;overflow:hidden;height:35px;\">"
+						var tdend="</td>"
+						var counter=0
+						//var unlockicon = "<svg class=\"bi bi-unlock-fill\" width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"> <rect width=\"11\" height=\"9\" x=\"2.5\" y=\"7\" rx=\"2\"/> <path fill-rule=\"evenodd\" d=\"M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z\" clip-rule=\"evenodd\"/> </svg>"
+						var unlockicon = "<svg class=\"bi bi-unlock-fill\" width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"> <path d=\"M.5 9a2 2 0 012-2h7a2 2 0 012 2v5a2 2 0 01-2 2h-7a2 2 0 01-2-2V9z\"/><path fill-rule=\"evenodd\" d=\"M8.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z\" clip-rule=\"evenodd\"/></svg>"
+
+
+
+						var spinner = "<img src=\"spinner.gif\" height=\"35\" />"
+
+							$("#piidata").html(spinner);
+                		$.ajax({
+                            url: url,
+                            type: 'GET',
+                            datatype: 'json',
+                            async: true,
+                            success: function(data){
+								var toinsert = "<table width=100% style=\"border: 0px solid black; border-collapse: separate; border-spacing: 3px 0px;\">"
+								data.forEach(function (arrayItem) {
+									counter++;
+									if (counter % 2 == 0){
+										tdstart=tdalt;
+									} else {
+										tdstart=td;
+									}
+
+
+									toinsert=toinsert+"<tr>";
+								    var name = arrayItem.name
+								    var address = arrayItem.address
+								    var email = arrayItem.email
+								    var mobile= arrayItem.mobileNo
+								    var gender= arrayItem.gender
+								    var dob= arrayItem.dob
+								    var prof=arrayItem.profession
+								    toinsert = toinsert+tdstart+unlockicon+tdend+tdstart+name+tdend+tdstart+address+tdend+tdstart+email+tdend+tdstart+mobile+tdend+tdstart+gender+tdend+tdstart+dob+tdend+tdstart+prof+tdend+"</tr>"
+								});
+								toinsert=toinsert+"</table>"
+
+
+								$("#piidata").hide();
+                            	$("#piidata").html(toinsert);
+                            	$("#piidata").fadeIn('fast');
+
+								$("#piidatalines").html("Data Sets: &nbsp;" + counter);
+
+                            },
+                            error: function(){
+                                    return "error";
+                            }
+                    });
+                    return "foo";
+
+
+
+                	}
+
+
+
+                	function readFileProfile(){
+
+                		var url = "/readfileprofile";
+                		var td="<td style=\"font-size:12px; background-color:#f0f5f5;overflow:hidden; height:35px; padding-left:6px\">"
+            				var tdalt="<td style=\"font-size:12px;padding-left:6px;overflow:hidden;height:35px;\">"
+						var tdend="</td>"
+						var counter=0
+						//var unlockicon = "<svg class=\"bi bi-unlock-fill\" width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"> <rect width=\"11\" height=\"9\" x=\"2.5\" y=\"7\" rx=\"2\"/> <path fill-rule=\"evenodd\" d=\"M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z\" clip-rule=\"evenodd\"/> </svg>"
+						var unlockicon = "<svg class=\"bi bi-unlock-fill\" width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"> <path d=\"M.5 9a2 2 0 012-2h7a2 2 0 012 2v5a2 2 0 01-2 2h-7a2 2 0 01-2-2V9z\"/><path fill-rule=\"evenodd\" d=\"M8.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z\" clip-rule=\"evenodd\"/></svg>"
+
+
+
+						var spinner = "<img src=\"spinner.gif\" height=\"35\" />"
+
+							$("#fileprofiledata").html(spinner);
+                		$.ajax({
+                            url: url,
+                            type: 'GET',
+                            datatype: 'json',
+                            async: true,
+                            success: function(data){
+								var toinsert = "<table width=100% style=\"border: 0px solid black; border-collapse: separate; border-spacing: 3px 0px;\">"
+								data.forEach(function (arrayItem) {
+									counter++;
+									if (counter % 2 == 0){
+										tdstart=tdalt;
+									} else {
+										tdstart=td;
+									}
+
+
+									toinsert=toinsert+"<tr>";
+								    var filename = arrayItem.filename
+								    var nashost = arrayItem.nashost
+								    var filepath = arrayItem.filepath
+								    var uid = arrayItem.uid
+								    var username = arrayItem.username
+								    var gid = arrayItem.gid
+								    var groupname = arrayItem.groupname
+								    var unixuserperm= arrayItem.unixuserperm
+								    var unixgroupperm= arrayItem.unixgroupperm
+								    var unixotherperm= arrayItem.unixotherperm
+								    var ctime=arrayItem.ctime
+								    var atime=arrayItem.atime
+								    var mtime=arrayItem.mtime
+								    var btime=arrayItem.btime
+								    var devname=arrayItem.devname
+								    var devtype=arrayItem.devtype
+								    var fstype=arrayItem.fstype
+
+								    toinsert = toinsert+tdstart+unlockicon+tdend+tdstart+filename+tdend+tdstart+nashost+tdend+tdstart+filepath+tdend+tdstart+uid+tdend+tdstart+username+tdend+tdstart+gid+tdend+tdstart+groupname+tdend+tdstart+unixuserperm+tdend+tdstart+unixgroupperm+tdend+tdstart+unixotherperm+tdend+tdstart+ctime+tdend+tdstart+atime+tdend+tdstart+mtime+tdend+tdstart+btime+tdend+tdstart+devname+tdend+tdstart+devtype+tdend+tdstart+fstype+tdend+"</tr>"
+								});
+								toinsert=toinsert+"</table>"
+
+
+								$("#fileprofiledata").hide();
+                            	$("#fileprofiledata").html(toinsert);
+                            	$("#fileprofiledata").fadeIn('fast');
+
+								$("#fileprofiledatalines").html("Data Sets: &nbsp;" + counter);
+
+                            },
+                            error: function(){
+                                    return "error";
+                            }
+                    });
+                    return "foo";
+
+
+
+                	}
+
+
+
+                	function readFileProfilesFromBC(){
+						var toinsert="";
+                		var url = "/getallfileprofilesfrombc";
+                		var td="<td style=\"font-size:12px; background-color:#ffe8e8;overflow:hidden; height:35px; padding-left:6px\">"
+            				var tdalt="<td style=\"font-size:12px;padding-left:6px;overflow:hidden;height:35px;\">"
+						var tdend="</td>"
+						var counter=0
+						var lockicon = "<svg class=\"bi bi-lock-fill\" width=\"1em\" height=\"1em\" viewBox=\"0 0 16 16\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"> <rect width=\"11\" height=\"9\" x=\"2.5\" y=\"7\" rx=\"2\"/> <path fill-rule=\"evenodd\" d=\"M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z\" clip-rule=\"evenodd\"/> </svg>"
+
+						var spinner = "<img src=\"spinner.gif\" height=\"35\" />"
+
+						$("#fileprofiledata_bc").html(spinner);
+
+                		$.ajax({
+                            url: url,
+                            type: 'GET',
+                            datatype: 'json',
+                            async: true,
+                            success: function(data){
+
+
+                            	toinsert = "<table width=100% style=\"border: 0px solid black; border-collapse: separate; border-spacing: 3px 0px;\">"
+								data.forEach(function (arrayItem) {
+									counter++;
+									if (counter % 2 == 0){
+										tdstart=tdalt;
+									} else {
+										tdstart=td;
+									}
+
+
+									toinsert=toinsert+"<tr>";
+									var filename = arrayItem.filename
+								    var nashost = arrayItem.nashost
+								    var filepath = arrayItem.filepath
+								    var uid = arrayItem.uid
+								    var username = arrayItem.username
+								    var gid = arrayItem.gid
+								    var groupname = arrayItem.groupname
+								    var unixuserperm= arrayItem.unixuserperm
+								    var unixgroupperm= arrayItem.unixgroupperm
+								    var unixotherperm= arrayItem.unixotherperm
+								    var ctime=arrayItem.ctime
+								    var atime=arrayItem.atime
+								    var mtime=arrayItem.mtime
+								    var btime=arrayItem.btime
+								    var devname=arrayItem.devname
+								    var devtype=arrayItem.devtype
+								    var fstype=arrayItem.fstype
+
+								    toinsert = toinsert+tdstart+lockicon+tdend+tdstart+filename+tdend+tdstart+nashost+tdend+tdstart+filepath+tdend+tdstart+uid+tdend+tdstart+username+tdend+tdstart+gid+tdend+tdstart+groupname+tdend+tdstart+unixuserperm+tdend+tdstart+unixgroupperm+tdend+tdstart+unixotherperm+tdend+tdstart+ctime+tdend+tdstart+atime+tdend+tdstart+mtime+tdend+tdstart+btime+tdend+tdstart+devname+tdend+tdstart+devtype+tdend+tdstart+fstype+tdend+"</tr>"
+								});
+								toinsert=toinsert+"</table>"
+
+
+								$("#fileprofiledata_bc").hide();
+                            	$("#fileprofiledata_bc").html(toinsert);
+                            	$("#fileprofiledata_bc").fadeIn('fast');
+								$("#fileprofilelines_bc").html("Data Sets: &nbsp;" + counter);
+
+                            },
+                            error: function(){
+                                    return "error";
+                            }
+                    });
+                    return "foo";
+
+
+
+                	}
+
+              	function clearScanResults(divid, linesdivid){
+              		$(divid).html("");
+              		$(linesdivid).html("Data Sets: &nbsp;0");
+              	}
+
+
+
+
+
+function copyDivToClipboard(divid) {
+                    var range = document.createRange();
+                    range.selectNode(document.getElementById(divid));
+                    window.getSelection().removeAllRanges(); // clear current selection
+                    window.getSelection().addRange(range); // to select text
+
+                    try {
+                        var success = document.execCommand("copy");
+                        if (success) {
+
+                        } else {
+                                alert("Cannot copy, use Ctrl-C");
+                        }
+                    } catch (err) {
+                                 alert("Cannot copy, use Ctrl-C. Error: " + err);
+
+                    }
+
+                    window.getSelection().removeAllRanges();// to deselect
+                }
+
+
+
+
+        function copyToClipboard(elementid){
+                var input = document.querySelector(elementid);
+                input.setSelectionRange(0, input.value.length + 1);
+                try {
+                        var success = document.execCommand('copy');
+                        if (success) {
+                         //here: call some confirmation message
+                                alert("copied");
+                        } else {
+                         //Handle error. Perhaps change tooltip message to tell user to use Ctrl-c instead.
+                                alert("copy failed");
+                        }
+                } catch (err) {
+                         //Handle error. Perhaps change tooltip message to tell user to use Ctrl-c instead.
+                                alert("copy failed, error:" + err);
+                }
+        }
+
+
+
+        function scrollto(element){
+                $('html, body').animate({ scrollTop: ($(element).offset().top)}, 'slow');
+        }
+
+
+
+                $(window).on('load', function () {
+
+                        readFileProfilesFromBC();
+                });
+        //]]>
+
+
+
+        </script>
+</body>
+</html>

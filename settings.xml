@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd" xmlns="http://maven.apache.org/SETTINGS/1.1.0"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+<profiles>
+
+<profile>
+
+<id>local-build</id>
+
+<activation>
+	<activeByDefault>true</activeByDefault>
+</activation>
+
+<!--
+<repositories>
+	<repository>
+		<id>central</id>
+		<name>Internal Artifact Store</name>
+		<url><https://url_to_artifact_store/jcenter/</url>>
+	</repository>
+    	<repository>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+                <id>central2</id>
+                <name>mvn-libs-release</name>
+                <url><https://url_to_maven_libs/mvn-libs-release</url>>
+     	</repository>
+        <repository>
+                <snapshots />
+                <id>snapshots</id>
+                <name>mvn-libs-snapshot</name>
+                <url><https://url_to_maven_libs/mvn-libs-snapshot</url>>
+   	</repository>
+</repositories>
+-->
+
+<!-- 
+<pluginRepositories>
+	<pluginRepository>
+		<id>central</id>
+		<name>Internal Artifact Store </name>
+		<url><https://url_to_artifact_store/jcenter/</url>>
+		<layout>default</layout>
+	</pluginRepository>
+    	<pluginRepository>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+                <id>central2</id>
+                <name>mvn-plugins-release</name>
+                <url><https://url_to_artifact_store/mvn-plugins-release</url>>
+        </pluginRepository>
+        <pluginRepository>
+                <snapshots />
+                <id>snapshots</id>
+                <name>mvn-plugins-snapshot</name>
+                <url><https://url_to_artifact_store/mvn-plugins-snapshot</url>>
+        </pluginRepository>
+</pluginRepositories>
+-->
+
+</profile>
+
+<!--
+<profile>
+     <id>sonar</id>
+        <activation>
+                <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+                 login data 
+                <sonar.host.url>http://sonar_server_url/</sonar.host.url>
+                <sonar.login>sonar_login_token_here</sonar.login>
+        </properties>
+</profile>
+-->
+
+</profiles>
+
+
+  <activeProfiles>
+        <activeProfile>local-build</activeProfile>
+  </activeProfiles>
+
+</settings>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<modelVersion>4.0.0</modelVersion>
+<groupId>com.datdyn</groupId>
+<artifactId>bccontrol</artifactId>
+<version>0.3.0-snapshot</version>
+<name>BCControl</name>
+<description>BCControl Server</description>
+<!--
+<scm>
+<connection>scm:git:<https://url_to_github/bccontrol.git</connection>>
+<developerConnection>scm:git:<https://url_to_github/bccontrol.git</developerConnection>>
+<tag>HEAD</tag>
+</scm>
+-->
+<parent>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-parent</artifactId>
+<version>2.2.6.RELEASE</version>
+</parent>
+<dependencies>
+<dependency>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-test</artifactId>
+<scope>test</scope>
+</dependency>
+<dependency>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+<dependency>
+<groupId>com.jayway.jsonpath</groupId>
+<artifactId>json-path</artifactId>
+<scope>test</scope>
+</dependency>
+<dependency>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-devtools</artifactId>
+<optional>true</optional>
+</dependency>
+
+
+
+
+<dependency>
+        <groupId>net.corda</groupId>
+        <artifactId>corda-rpc</artifactId>
+        <version>4.3</version>
+        <exclusions>
+        <exclusion>
+            <artifactId>cordform-common</artifactId>
+              <groupId>net.corda</groupId>
+            </exclusion>
+        </exclusions>
+</dependency>
+
+    <!-- https://mvnrepository.com/artifact/net.corda/corda-serialization -->
+    <dependency>
+        <groupId>net.corda</groupId>
+        <artifactId>corda-serialization</artifactId>
+        <version>4.3</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+    <dependency>
+        <groupId>com.googlecode.json-simple</groupId>
+        <artifactId>json-simple</artifactId>
+        <version>1.1</version>
+    </dependency>
+    <!--
+    <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-all</artifactId>
+        <version>4.1.48.Final</version>
+    </dependency>
+
+
+    -->
+<dependency>
+    <groupId>org.apache.activemq</groupId>
+    <artifactId>artemis-core-client</artifactId>
+    <version>2.11.0</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.activemq</groupId>
+    <artifactId>artemis-jms-client</artifactId>
+    <version>2.11.0</version>
+</dependency>
+
+
+<dependency>
+    <groupId>org.apache.activemq</groupId>
+    <artifactId>artemis-jms-server</artifactId>
+    <version>2.11.0</version>
+</dependency>
+
+<dependency>
+    <groupId>javax.json</groupId>
+    <artifactId>javax.json-api</artifactId>
+    <version>1.1.4</version>
+  </dependency>
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+
+
+    <dependency>
+        <groupId>workflows-0.3.0</groupId>
+        <artifactId>workflows-0.3.0</artifactId>
+        <scope>system</scope>
+        <version>0.3.0</version>
+        <systemPath>${basedir}/src/main/resources/jars/workflows-0.3.0-ControlX.jar</systemPath>
+    </dependency>
+
+
+    <dependency>
+        <groupId>contracts-0.3.0</groupId>
+        <artifactId>contracts-0.3.0</artifactId>
+        <scope>system</scope>
+        <version>0.3.0</version>
+        <systemPath>${basedir}/src/main/resources/jars/contracts-0.3.0-ControlX.jar</systemPath>
+    </dependency>
+</dependencies>
+
+
+
+
+<properties>
+    <java.version>1.8</java.version>
+    <!--
+    <start-class>com.datdyn.bccontrol.BCControl</start-class>
+    -->
+</properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
+<!--
+<configuration>
+                <executable>true</executable>
+            </configuration>
+-->
+            </plugin>
+
+<!--
+  <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>1.0</version>
+            </plugin>
+-->
+        </plugins>
+    </build>
+
+<!--
+  <distributionManagement>
+    <repository>
+      <id>central</id>
+      <name>blockchain-releases</name>
+      <url>https://url_to_artifact_repo_release</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>blockchain-snapshots</name>
+      <url>https://url_to_artifact_repo_snapshot</url>
+    </snapshotRepository>
+  </distributionManagement>
+-->
+
+
+</project>
