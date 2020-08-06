@@ -38,6 +38,7 @@ public class FileProfile {
 	private String status;
 	private String hash;
 	private String identifier;
+	private String time;
 	
 	//additional add for corda
 	public String getIdentifier() {
@@ -46,6 +47,13 @@ public class FileProfile {
 
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
+	}
+	public String gettime() {
+		return time;
+	}
+
+	public void settime(String time) {
+		this.time = time;
 	}
 	//
 

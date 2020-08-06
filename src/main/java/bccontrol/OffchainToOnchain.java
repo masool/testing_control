@@ -53,7 +53,7 @@ public class OffchainToOnchain {
 	Connection connection = null;
 	
 	 // Insert new records into Blockchain
-	public List<FileProfile> InsertRecordintobc(List<FileProfile> ixFileProfileData, String remId, String time) throws NoSuchAlgorithmException, JsonProcessingException, InterruptedException, ExecutionException, SQLException, AuditTrailException {
+	public List<FileProfile> InsertRecordintobc(List<FileProfile> ixFileProfileData, String remId) throws NoSuchAlgorithmException, JsonProcessingException, InterruptedException, ExecutionException, SQLException, AuditTrailException {
 			
 			GetDB getDB = new GetDB();
 			List<FileProfile> offchainSet = getDB.fetchFileProfileRecord(remId);
@@ -69,11 +69,10 @@ public class OffchainToOnchain {
 			String host1 = "O=Org1, L=London, C=GB";
 //			String identifier = "12345--13-131414"; 
 			String identifier = UUID;
-			String timeStamp = time;
 			SignedTransaction result;
 		    CordaClient cordaclient  = new CordaClient();
 			CordaRPCOps cordarpcops = cordaclient.getCordaRPCOps(cordanode0, cordauser, cordapassword);
-			result = cordarpcops.startTrackedFlowDynamic(FileProfileDataFlow.class,ixFileProfileData.get(i).getFilename(),timeStamp,ixFileProfileData.get(i).getHash(), identifier,ixFileProfileData.get(i).getNashost(), ixFileProfileData.get(i).getSymlink(), ixFileProfileData.get(i).getUid(),ixFileProfileData.get(i).getUsername(),ixFileProfileData.get(i).getGid(),
+			result = cordarpcops.startTrackedFlowDynamic(FileProfileDataFlow.class,ixFileProfileData.get(i).getFilename(),ixFileProfileData.get(0).gettime(),ixFileProfileData.get(i).getHash(), identifier,ixFileProfileData.get(i).getNashost(), ixFileProfileData.get(i).getSymlink(), ixFileProfileData.get(i).getUid(),ixFileProfileData.get(i).getUsername(),ixFileProfileData.get(i).getGid(),
 					ixFileProfileData.get(i).getGroupname(),ixFileProfileData.get(i).getUnixuserperm(),ixFileProfileData.get(i).getUnixgroupperm(),ixFileProfileData.get(i).getUnixotherperm(),ixFileProfileData.get(i).getWinuserperms(),ixFileProfileData.get(i).getWingroupperms(),ixFileProfileData.get(i).getWinotherperms(),ixFileProfileData.get(i).getCtime(),ixFileProfileData.get(i).getAtime(),ixFileProfileData.get(i).getMtime(),ixFileProfileData.get(i).getBtime(),ixFileProfileData.get(i).getSize(),ixFileProfileData.get(i).getInode(),ixFileProfileData.get(i).getDevname(),ixFileProfileData.get(i).getDevtype(),
 					ixFileProfileData.get(i).getDevmajor(),ixFileProfileData.get(i).getDevminor(),ixFileProfileData.get(i).getFstype(),ixFileProfileData.get(i).getPiientities(),host1).getReturnValue().get();
 			ResponseEntity<String> res = ResponseEntity.status(HttpStatus.CREATED).body("Signed Tx_id: "+ result.getId());
@@ -85,7 +84,7 @@ public class OffchainToOnchain {
 	    }
 	
 	//Compare hashes from offledger & input payload and find modified records and persist same records into Blockchain
-	 public List<FileProfile> updateRecordOffchainOnchain(List<FileProfile> ixFileProfileData, String remId,String time) throws NoSuchAlgorithmException, JsonProcessingException, AuditTrailException, InterruptedException, ExecutionException, SQLException {
+	 public List<FileProfile> updateRecordOffchainOnchain(List<FileProfile> ixFileProfileData, String remId) throws NoSuchAlgorithmException, JsonProcessingException, AuditTrailException, InterruptedException, ExecutionException, SQLException {
 
 //		 	AuditTrail auditTrail = new AuditTrail();
 			GetDB getDB = new GetDB();
@@ -188,10 +187,9 @@ public class OffchainToOnchain {
 	 			String host1 = "O=Org1, L=London, C=GB";
 	 			String identifier = UUID; 
 	 			SignedTransaction result;
-	 			String timeStamp = time;
 	 		    CordaClient cordaclient  = new CordaClient();
 	 			CordaRPCOps cordarpcops = cordaclient.getCordaRPCOps(cordanode0, cordauser, cordapassword);
-	 			result = cordarpcops.startTrackedFlowDynamic(FileProfileDataFlow.class,ixFileProfileData.get(i).getFilename(), timeStamp,ixFileProfileData.get(i).getHash(),identifier,ixFileProfileData.get(i).getNashost(), ixFileProfileData.get(i).getSymlink(), ixFileProfileData.get(i).getUid(),ixFileProfileData.get(i).getUsername(),ixFileProfileData.get(i).getGid(),
+	 			result = cordarpcops.startTrackedFlowDynamic(FileProfileDataFlow.class,ixFileProfileData.get(i).getFilename(), ixFileProfileData.get(0).gettime(),ixFileProfileData.get(i).getHash(),identifier,ixFileProfileData.get(i).getNashost(), ixFileProfileData.get(i).getSymlink(), ixFileProfileData.get(i).getUid(),ixFileProfileData.get(i).getUsername(),ixFileProfileData.get(i).getGid(),
 	 					ixFileProfileData.get(i).getGroupname(),ixFileProfileData.get(i).getUnixuserperm(),ixFileProfileData.get(i).getUnixgroupperm(),ixFileProfileData.get(i).getUnixotherperm(),ixFileProfileData.get(i).getWinuserperms(),ixFileProfileData.get(i).getWingroupperms(),ixFileProfileData.get(i).getWinotherperms(),ixFileProfileData.get(i).getCtime(),ixFileProfileData.get(i).getAtime(),ixFileProfileData.get(i).getMtime(),ixFileProfileData.get(i).getBtime(),ixFileProfileData.get(i).getSize(),ixFileProfileData.get(i).getInode(),ixFileProfileData.get(i).getDevname(),ixFileProfileData.get(i).getDevtype(),
 	 					ixFileProfileData.get(i).getDevmajor(),ixFileProfileData.get(i).getDevminor(),ixFileProfileData.get(i).getFstype(),ixFileProfileData.get(i).getPiientities(),host1).getReturnValue().get();
 	 			ResponseEntity<String> res = ResponseEntity.status(HttpStatus.CREATED).body("Signed Tx_id: "+ result.getId());
@@ -370,6 +368,7 @@ public class OffchainToOnchain {
 	 			fprof.setDevtype(thisstate.getState().getData().getDevType());
 	 			fprof.setFstype(thisstate.getState().getData().getFsType());
 	 			fprof.setPiientities(thisstate.getState().getData().getPiiEntities());
+	 			fprof.settime(thisstate.getState().getData().getTimeStamp());
 	 			fprofs.add(fprof);
 	 		}
 	 		Collections.reverse(fprofs);

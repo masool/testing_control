@@ -68,6 +68,7 @@ public class AuditTrail {
         fileProfile2.setWingroupperms("r++");
         fileProfile2.setWinotherperms("r--");
         fileProfile2.setPiientities("piientities");
+        fileProfile2.settime("2020-07-27 23:30:26.632");
 //        obj.add(fileProfile);
         obj.add(fileProfile2);
         return obj;

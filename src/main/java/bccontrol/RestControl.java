@@ -575,7 +575,6 @@ public class RestControl {
 			InsertDB insertDB = new InsertDB();
 			UpdateDB updateDB = new UpdateDB();
 			
-			String time = requestParams.get("time");
 			String remStatus = "ACTIVE";
 			String respMessage = "Audit Trail Enabled Successfully";
 			
@@ -597,7 +596,7 @@ public class RestControl {
 
 //				Insert records into blockchain db
 				OffchainToOnchain calculatehash = new OffchainToOnchain(cordauser, cordapassword,cordanode0);
-				List<FileProfile> comResp = calculatehash.InsertRecordintobc(ixFileProfileData,remId, time);
+				List<FileProfile> comResp = calculatehash.InsertRecordintobc(ixFileProfileData,remId);
 				if(!message.equals("success")){
 					remStatus = "Failed";
 					respMessage = message;
@@ -622,7 +621,7 @@ public class RestControl {
 		           	 }
 		           	 else {
 		          		OffchainToOnchain calculatehash = new OffchainToOnchain(cordauser, cordapassword,cordanode0);
-		          		List<FileProfile> UpdcomResp = calculatehash.updateRecordOffchainOnchain(ixFileProfileData,remId, time);
+		          		List<FileProfile> UpdcomResp = calculatehash.updateRecordOffchainOnchain(ixFileProfileData,remId);
 		           		System.out.println("trigger corda flow");
 		           		 }
 		           	 }	
